@@ -4,6 +4,11 @@ Calc::Calc(const char* _expr) : result(0.0f) {
 	int p = 0;
 	expr_len = 0;
 	expr_RPN_len = 0;
+	for(int i = 0; i < 100; ++i)
+		for (int j = 0; j < 100; ++j) {
+			expr[i][j] = '#';
+			expr_RPN[i][j] = '#';
+		}
 	while (p < std::strlen(_expr) - 1) {
 		if (_expr[p] != ' ') {
 			bool fl = false;
@@ -20,7 +25,7 @@ Calc::Calc(const char* _expr) : result(0.0f) {
 				int sgn = 1;
 				int first = p;
 				if (_expr[p] == '-') sgn = -1, ++p;
-				while (isalnum(_expr[p]) || _expr[p] == '.' || _expr[p] == ',') ++p;
+				while (isalnum(_expr[p]) || _expr[p] == '.' || _expr[p] == ',' || _expr[p] == 'e' || (p > 0 && (_expr[p] == '+' || _expr[p] == '-' && _expr[p-1] == 'e'))) ++p;
 				int str_len = p - first + 1;
 				char* tmp_str = new char[str_len];
 				for (int i = 0; i < str_len - 1; ++i) {
@@ -112,6 +117,11 @@ void Calc::exprToRPN() {
 		std::swap(expr_RPN[i], expr_RPN[expr_RPN_len - i - 1]);
 	expr_RPN[expr_RPN_len][0] = '=';
 	//expr_RPN.push_back("=");
+	std::cout << "RPN: ";
+	for (int i = 0; i < expr_RPN_len; ++i)
+		for (int j = 0; expr_RPN[i][j] != '#'; ++j)
+			std::cout << expr_RPN[i][j] << " ";
+	std::cout << std::endl;
 }
 
 void Calc::RPNToResult() {
@@ -123,6 +133,7 @@ void Calc::RPNToResult() {
 			if (operc[j] == expr_RPN[i][0])
 				fl = true;
 		}
+		if ('0' <= (expr_RPN[i][1]) && (expr_RPN[i][1]) <= '9') fl = false;
 		if (fl) {
 			float t1, t2;
 			
