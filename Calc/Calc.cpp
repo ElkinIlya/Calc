@@ -25,7 +25,7 @@ Calc::Calc(const char* _expr) : result(0.0f) {
 				int sgn = 1;
 				int first = p;
 				if (_expr[p] == '-') sgn = -1, ++p;
-				while (isalnum(_expr[p]) || _expr[p] == '.' || _expr[p] == ',' || _expr[p] == 'e' || (p > 0 && (_expr[p] == '+' || _expr[p] == '-' && _expr[p-1] == 'e'))) ++p;
+				while (isalnum(_expr[p]) || _expr[p] == '.' || _expr[p] == ',' || _expr[p] == 'e' || (p > 0 && (_expr[p] == '+' || _expr[p] == '-') && _expr[p-1] == 'e')) ++p;
 				int str_len = p - first + 1;
 				char* tmp_str = new char[str_len];
 				for (int i = 0; i < str_len - 1; ++i) {
